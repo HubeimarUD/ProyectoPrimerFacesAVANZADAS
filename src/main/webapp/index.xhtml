@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Prueba inicio</title>
+</h:head>
+<h:body>
+    <div class="card">
+        <h:form>
+            <h1>MAPA MENTAL EJEMPLO</h1>
+            <p:mindmap value="#{mindmapView.root}" style="width: 100%;height: 600px;border: 1px solid black;">
+                <p:ajax event="select" listener="#{mindmapView.onNodeSelect}"/>
+                <p:ajax event="dblselect" listener="#{mindmapView.onNodeDblselect}" update="output"
+                        oncomplete="PF('details').show();"/>
+            </p:mindmap>
+            <p:dialog widgetVar="details" header="Node Details" resizable="false" modal="true" showEffect="fade"
+                      hideEffect="fade">
+                <h:outputText id="output" value="#{mindmapView.selectedNode.data}"/>
+            </p:dialog>
+        </h:form>
+    </div>
+
+    <h:form id="form">
+        <div class="card">
+            <h1>CARRUSEL DE PRODUCTOS</h1>
+            <p:carousel value="#{carouselView.products}" var="product" numVisible="3" numScroll="3"
+                        responsiveOptions="#{carouselView.responsiveOptions}">
+                <f:facet name="header">
+                    <h5>Basic</h5>
+                </f:facet>
+                <div class="product-item">
+                    <div class="product-item-content">
+                        <div class="mb-3">
+                            <p:graphicImage name="demo/images/product/#{product.image}" styleClass="product-image"/>
+                        </div>
+                        <div>
+                            <h4 class="mb-1">#{product.name}</h4>
+                            <h6 class="mt-0 mb-3">
+                                <h:outputText value="#{product.price}">
+                                    <f:convertNumber type="currency" pattern="¤#0" currencySymbol="$" />
+                                </h:outputText>
+                            </h6>
+                            <span class="product-badge status-#{product.inventoryStatus.name().toLowerCase()}">#{product.inventoryStatus.text}</span>
+                            <div class="mt-5">
+                                <p:commandButton type="button" icon="pi pi-search" styleClass="rounded-button mr-2" />
+                                <p:commandButton type="button" icon="pi pi-star" styleClass="ui-button-success rounded-button mr-2" />
+                                <p:commandButton type="button" icon="pi pi-cog" styleClass="ui-button-help rounded-button" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p:carousel>
+        </div>
+    </h:form>
+
+	<h:form>
+	<h2>OrderList de paises</h2>
+    <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+    <div class="card">
+        <h5>Advanced</h5>
+        <p:orderList value="#{orderListView.countries}" var="country" itemValue="#{country}"
+                     converter="#{countryConverter}" controlsLocation="left" responsive="true">
+            <p:ajax event="select" listener="#{orderListView.onSelect}" update="msgs"/>
+            <p:ajax event="unselect" listener="#{orderListView.onUnselect}" update="msgs"/>
+            <p:ajax event="reorder" listener="#{orderListView.onReorder}" update="msgs"/>
+
+            <f:facet name="caption">Available</f:facet>
+
+            <p:column style="width:40px">
+                <span class="flag flag-#{country.code}" style="width: 30px; height: 20px"/>
+            </p:column>
+
+            <p:column>
+                <h:outputText value="#{country.name}"/>
+            </p:column>
+        </p:orderList>
+    </div>
+
+
+	<div class="card">
+    <h:form>
+    	<h2>Horario</h2>
+        <p:growl id="messages" showDetail="true"/>
+
+        <p:schedule id="schedule" value="#{scheduleJava8View.eventModel}" widgetVar="myschedule"
+                    timeZone="#{scheduleJava8View.serverTimeZone}" clientTimeZone="#{scheduleJava8View.serverTimeZone}">
+            <p:ajax event="dateSelect" listener="#{scheduleJava8View.onDateSelect}" update="eventDetails"
+                    oncomplete="PF('eventDialog').show();"/>
+            <p:ajax event="eventSelect" listener="#{scheduleJava8View.onEventSelect}" update="eventDetails"
+                    oncomplete="PF('eventDialog').show();"/>
+            <p:ajax event="eventMove" listener="#{scheduleJava8View.onEventMove}" update="messages"/>
+            <p:ajax event="eventResize" listener="#{scheduleJava8View.onEventResize}" update="messages"/>
+        </p:schedule>
+
+        <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="fade" hideEffect="fade">
+            <h:panelGrid id="eventDetails" columns="2" cellpadding="7">
+                <p:outputLabel for="title" value="Titles" styleClass="font-bold"/>
+                <p:inputText id="title" value="#{scheduleJava8View.event.title}" required="true"/>
+
+                <p:outputLabel for="from" value="From" styleClass="font-bold"/>
+                <p:datePicker id="from" value="#{scheduleJava8View.event.startDate}" pattern="dd/MM/yyyy"
+                              showTime="true" appendTo="@(body)"/>
+
+                <p:outputLabel for="to" value="To" styleClass="font-bold"/>
+                <p:datePicker id="to" value="#{scheduleJava8View.event.endDate}" pattern="dd/MM/yyyy"
+                              showTime="true" appendTo="@(body)"/>
+
+                <p:outputLabel for="allDay" value="All Day" styleClass="font-bold"/>
+                <h:selectBooleanCheckbox id="allDay" value="#{scheduleJava8View.event.allDay}"/>
+            </h:panelGrid>
+
+            <div class="flex justify-content-between mt-3">
+                <p:commandButton type="reset" value="Reset" styleClass="font-bold ui-button-outlined"/>
+                <p:commandButton id="addButton" value="Save" action="#{scheduleJava8View.addEvent}"
+                            oncomplete="PF('myschedule').update();PF('eventDialog').hide();"/>
+            </div>
+        </p:dialog>
+    </h:form>
+	</div>
+</h:form>
+
+<h:form>
+	<h2>Lista de eleccion</h2>
+    <p:growl id="msg" showDetail="true" escape="false"/>
+
+    <div class="card">
+        <h5 style="margin-top: 0">Basic PickList</h5>
+        <p:pickList id="pickList" value="#{pickListView.cities}" var="cities" itemLabel="#{cities}" itemValue="#{cities}"/>
+    </div>
+
+</h:form>  
+<h:form>
+  <div class="card">
+        <h5>Ajax and No Border</h5>
+        <p:tree value="#{treeBasicView.root}" var="node" dynamic="true" styleClass="ui-noborder">
+            <p:treeNode>
+                <h:outputText value="#{node}"/>
+            </p:treeNode>
+        </p:tree>
+    </div>
+</h:form>  
+
+</h:body>
+<h1></h1>
+<h1></h1>
+<h1></h1>
+<footer>Creado por Cristian Camilo Torres y Hubeimar Fernandez, ez</footer>
+
+
+</html>

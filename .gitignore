@@ -1,0 +1,25 @@
+# Archivos compilados
+*.class
+*.jar
+*.war
+
+# Carpetas de compilación
+/build/
+/dist/
+/target/
+
+# Configuración del IDE
+/.idea/
+/nbproject/private/
+/.vscode/
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

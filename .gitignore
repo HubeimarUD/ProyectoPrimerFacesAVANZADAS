@@ -1,25 +1,50 @@
-# Archivos compilados
+# =========================
+# Archivos compilados Java
+# =========================
 *.class
 *.jar
 *.war
+*.ear
 
+# =========================
 # Carpetas de compilación
-/build/
-/dist/
-/target/
+# =========================
+target/
+build/
+dist/
 
-# Configuración del IDE
-/.idea/
-/nbproject/private/
-/.vscode/
+# =========================
+# Eclipse
+# =========================
+.project
+.classpath
+.settings/
+.metadata/
 
-# Logs
+# =========================
+# IntelliJ IDEA
+# =========================
+.idea/
+
+# =========================
+# NetBeans
+# =========================
+nbproject/private/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Logs y temporales
+# =========================
 *.log
-
-# Archivos temporales
 *.tmp
 *.temp
 
+# =========================
 # Sistema operativo
+# =========================
 .DS_Store
-Thumbs.db
+Thumbs.dbb
